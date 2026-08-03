@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/lib/tklbam-pypy2/bin/pypy
 # 
 # Copyright (c) 2010-2011 Liraz Siri <liraz@turnkeylinux.org>
 # 
@@ -34,16 +34,16 @@ import re
 import shutil
 
 from StringIO import StringIO
-import executil
 
 TKLBAM_LIB_PATH = os.environ.get('TKLBAM_LIB_PATH', 
                                  '/usr/lib/tklbam')
 sys.path.insert(0, TKLBAM_LIB_PATH)
 
-try:
-    from temp import TempDir, TempFile
-    from backup import ProfilePaths
+try:  # custom TKL imports
+    from pylib import executil
+    from pylib.temp import TempDir, TempFile
     import dirindex
+    from backup import ProfilePaths
 except ImportError, e:
     print >> sys.stderr, \
             "Can't find TKLBAM modules in TKLBAM_LIB_PATH=%s\n" % TKLBAM_LIB_PATH
@@ -75,7 +75,7 @@ class MountISO:
         executil.system("mount -o loop", iso, cdroot)
         self.cdroot = cdroot
 
-        executil.system("mount -o loop", join(cdroot, "casper/10root.squashfs"), rootfs)
+        executil.system("mount -o loop", join(cdroot, "live/10root.squashfs"), rootfs)
         self.rootfs = rootfs
 
     def __del__(self):
@@ -157,7 +157,15 @@ class Profile:
         for control in parse_status(join(path_rootfs, "var/lib/dpkg/status")):
             d = parse_control(control)
             if d['Status'] == 'install ok installed':
-                packages.append(d['Package'])
+                # filter out live packages (removed on install)
+                if not d['Package'] in [
+                    'di-live',
+                    'tkl-installer',
+                    'live-boot',
+                    'live-boot-initramfs-tools',
+                    'live-tools',
+                ]:
+                    packages.append(d['Package'])
 
         packages.sort()
         return packages

@@ -12,7 +12,9 @@
 # system minus instance-specific stuff
 /usr/local
 
+# include /etc
 /etc
+# except some specific general paths
 -/etc/default/grub
 -/etc/grub.d
 -/etc/debian_version
@@ -30,49 +32,67 @@
 -/etc/udev/rules.d
 -/etc/ssh/ssh_host_*
 -/etc/mysql/debian.cnf
--/etc/webmin/system-status/history
 
-# live-boot dirs - di-live & live-tools removed at install for v16.0
--/etc/init.d/di-live
+# webmin specific
+-/etc/webmin/system-status/history
+-/etc/webmin/webmincron/crons
+
+## live/installer paths - packages removed at install time
+# live-tools paths (some also used by tkl-installer; no live-boot paths)
 -/etc/init.d/live-tools
 -/etc/live
--/etc/rc0.d/K01di-live
--/etc/rc0.d/K01live-tools
--/etc/rc6.d/K01di-live
--/etc/rc6.d/K01live-tools
--/etc/rcS.d/S01di-live
--/etc/rcS.d/S01live-tools
 -/etc/systemd/system/live-tools.service
--/etc/systemd/system/rescue.service.d
+
+# legacy live-tools paths
+-/etc/rc0.d/K01live-tools
+-/etc/rc6.d/K01live-tools
+-/etc/rcS.d/S01live-tools
+
+# tkl-installer paths
 -/etc/systemd/system/rescue.service.d/override.conf
--/etc/systemd/system/rescue.target.d
 -/etc/systemd/system/rescue.target.d/override.conf
--/etc/systemd/system/rescue.target.wants
+
+# legacy di-live paths
+-/etc/init.d/di-live
+-/etc/rc0.d/K01di-live
+-/etc/rcS.d/S01di-live
 -/etc/systemd/system/rescue.target.wants/di-live.service
 
 # ec2 blacklist
 -/etc/event.d/console
+# legacy paths
 -/usr/local/bin/ec2metadata
 -/usr/local/lib/python2.6/dist-packages/ec2metadata.py*
 
 # vmdk blacklist
 -/etc/kernel-img.conf
 
-# /var whitelist
-/var/run
--/var/run/*.pid
--/var/run/*/*.pid
-
+# web content/app whitelist
 /var/www
-/var/lib/shellinabox # in case you reconfigure the certificate
+-/var/www/.composer/cache
+
+# other than /var/www; /var is not included in backup by default, but blacklist
+# specific paths that are never needed
+-/var/lib/apt/lists
+-/var/lib/dhcpcd
+-/var/lib/fail2ban/fail2ban.sqlite3
+
+# /var/spool is tmp data that is generally intended to survive reboot
 /var/spool
+-/var/spool/tklbam-squid
 -/var/spool/postfix/lib
 -/var/spool/postfix/private
 -/var/spool/postfix/public
 -/var/spool/postfix/pid
 -/var/spool/postfix/dev
 
--/var/spool/tklbam-squid
-
 # dehydrated data for SSL certs
 /var/lib/dehydrated
+
+# never include tmpfs paths /tmp, /run & /var/run (symlink to /run)
+-/tmp
+-/run
+-/var/run
+
+# legacy shellinabox
+/var/lib/shellinabox

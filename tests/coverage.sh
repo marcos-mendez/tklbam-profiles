@@ -5,12 +5,12 @@
 # Also runs the lint on the profile as it was before the fix
 # (tests/fixtures/moodle-stale.profile) and fails unless it is rejected.
 #
-#   tests/coverage.sh [THRESHOLD]
+#   tests/coverage.sh [THRESHOLD]     (or COVERAGE_THRESHOLD in the environment)
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo="$(cd "$here/.." && pwd)"
-threshold="${1:-95}"
+threshold="${1:-${COVERAGE_THRESHOLD:-95}}"
 conf="$here/fixtures/moodle.conf"
 
 tap="$("$here/check-profile.sh" "$repo/moodle" "$conf" || true)"

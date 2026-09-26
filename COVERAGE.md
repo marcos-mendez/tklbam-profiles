@@ -4,7 +4,15 @@ Measured on 2026-09-24 against upstream master (2e38ada), following the
 project decision 0003 (90 percent floor per repository, 95 percent for every
 file our changes touch).
 
-## Baseline: 0 percent, nothing measured
+## Measured baseline on the default branch: 100 percent (2026-09-26)
+
+Pull request #1 merged on 2026-09-26 (merge commit 71b3766) and brought
+`tests/coverage.sh` with it: 4 of 4 lines of the moodle profile accounted for by tests/check-profile.sh, 100 percent. The gate in
+`.github/workflows/tests.yml` is set to 100, the measured number rounded
+down, and is only ever raised. The sections that follow record the state
+before the merge.
+
+## Baseline before the merge: 0 percent, nothing measured
 
 The repository holds 157 files: 150 tklbam profile lists at the top level
 (one per appliance, each line a path to include or, with a leading `-`, to

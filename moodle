@@ -1,2 +1,6 @@
-/var/lib/moodle
--/var/lib/moodle/cache
+# moodledata (/var/www/moodledata, see the moodle appliance conf.d/main) is
+# covered by /var/www in the core profile; skip what Moodle rebuilds itself
+-/var/www/moodledata/cache
+-/var/www/moodledata/localcache
+-/var/www/moodledata/sessions
+-/var/www/moodledata/temp
